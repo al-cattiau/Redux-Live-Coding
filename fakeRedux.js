@@ -7,12 +7,20 @@ const createStore = (reducer, middlewares = []) => {
         getState: ()=> {
             return state;
         },
+        
         subscribe: (cb)=> {
             cbs.push(cb);
+            // 返回一个 unsubscribe 函数
+            return () => {
+                const cbIndex = cbs.indexOf(cb);
+                if(cbIndex){
+                    cbs.splice(cbIndex, 1);
+                }
+            }
         },
 
         dispatch: ( action ) => {
-            const nextState = [action].reduce( reducer, undefined );
+            const nextState = reducer( state, action);
             if(nextState !== state ) {
                 state = nextState;
                 cbs.forEach( cb => cb() );
@@ -37,6 +45,10 @@ const createStore = (reducer, middlewares = []) => {
      store.dispatch =  中间件2(中间件1( store.dispatch))
 
      所以中间件的流动顺序与默认 reduce 传递的函数顺序相反
+
+     next => action => {
+        console.log('log action in middleware1', action);        
+     }
     
     `
 

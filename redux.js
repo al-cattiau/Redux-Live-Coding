@@ -1,4 +1,40 @@
 `
+
+Redux 简介：
+
+全局状态管理器
+
+通过 dispatch 一个对象描述发生的动作，如
+
+coonst addCount = 'ADD_COUNT'; // 声明动作类型
+
+
+
+{
+    type: addCount,
+    payload: 2,
+}
+
+
+Reducer 负责根据 action 与当前的状态， 计算出一个新的状态。
+如果有新的状态产生，把所有订阅的对象全部更新一遍。
+
+function reducer(initialState={}, action ) {
+    swicth(action.type) {
+
+        default: 
+            return state;
+    }
+    
+}
+
+关键点： reducer 只能返回一个新的状态，不能直接修改原有的值
+dispatch 的对象应该是一个普通的对象，没有任何副作用，只描述发生了什么
+`
+
+
+
+`
 为什么 store 需要不可变 ?
 因为 connect 的 Redux 组件判断 store 有无变化的方式为 
     previousStore === currentStore ? 
@@ -60,7 +96,7 @@ currentValue 当前值
 
     使用 monkeyPaching 的方式实现中间件, like this：
     
-        const newDispatch = action => {
+        store.dispatch = action => {
             console.log("do something....");
             store.dispatch(action);
         }
@@ -75,9 +111,9 @@ currentValue 当前值
 
     这样写最大的好处是，我们可以配合 reduce 实现更加优雅的链式调用
 
-    middlewares.forEach(newDispatch, mdw => mdw(newDispatch),  store.dispatch)
+    middlewares.forEach( dispatch, mdw => mdw( dispatch),  store.dispatch)
 
-    const dispatch = middleware(oldDispatch)
+    遍历每一个中间件，每次调用中间件，把 dispatch 当成参数传进去，得到一个增强了功能的 dispatch
 
 `
 
