@@ -2,6 +2,14 @@
 import { createStore } from "./fakeRedux";
 
 `
+  createStore(reducer) 
+  返回 store = {
+    getState: func,
+    subscribe: func,
+    dispatch: func,
+  }
+`
+`
 Redux 最简单用例
 store 中存储一个 count 用于计数，初始值为 0
 
